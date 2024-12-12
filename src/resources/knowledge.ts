@@ -3,24 +3,49 @@
 import { APIResource } from '../resource';
 import { isRequestOptions } from '../core';
 import * as Core from '../core';
+import { CursorPage, type CursorPageParams } from '../pagination';
 
 export class KnowledgeResource extends APIResource {
   create(body: KnowledgeCreateParams, options?: Core.RequestOptions): Core.APIPromise<Knowledge> {
     return this._client.post('/v1/knowledge', Core.multipartFormRequestOptions({ body, ...options }));
   }
 
-  list(query?: KnowledgeListParams, options?: Core.RequestOptions): Core.APIPromise<KnowledgeListResponse>;
-  list(options?: Core.RequestOptions): Core.APIPromise<KnowledgeListResponse>;
+  retrieve(knowledgeId: string, options?: Core.RequestOptions): Core.APIPromise<Knowledge> {
+    return this._client.get(`/v1/knowledge/${knowledgeId}`, options);
+  }
+
+  update(
+    knowledgeId: string,
+    body: KnowledgeUpdateParams,
+    options?: Core.RequestOptions,
+  ): Core.APIPromise<KnowledgeUpdateResponse> {
+    return this._client.patch(`/v1/knowledge/${knowledgeId}`, { body, ...options });
+  }
+
+  list(
+    query?: KnowledgeListParams,
+    options?: Core.RequestOptions,
+  ): Core.PagePromise<KnowledgesCursorPage, Knowledge>;
+  list(options?: Core.RequestOptions): Core.PagePromise<KnowledgesCursorPage, Knowledge>;
   list(
     query: KnowledgeListParams | Core.RequestOptions = {},
     options?: Core.RequestOptions,
-  ): Core.APIPromise<KnowledgeListResponse> {
+  ): Core.PagePromise<KnowledgesCursorPage, Knowledge> {
     if (isRequestOptions(query)) {
       return this.list({}, query);
     }
-    return this._client.get('/v1/knowledge', { query, ...options });
+    return this._client.getAPIList('/v1/knowledge', KnowledgesCursorPage, { query, ...options });
+  }
+
+  delete(knowledgeId: string, options?: Core.RequestOptions): Core.APIPromise<void> {
+    return this._client.delete(`/v1/knowledge/${knowledgeId}`, {
+      ...options,
+      headers: { Accept: '*/*', ...options?.headers },
+    });
   }
 }
+
+export class KnowledgesCursorPage extends CursorPage<Knowledge> {}
 
 export interface Knowledge {
   id: string;
@@ -34,12 +59,8 @@ export interface Knowledge {
   status: 'pending' | 'partial' | 'ready' | 'failed';
 }
 
-export interface KnowledgeListResponse {
-  data: Array<Knowledge>;
-
-  next: string;
-
-  object: 'list';
+export interface KnowledgeUpdateResponse {
+  name?: string;
 }
 
 export interface KnowledgeCreateParams {
@@ -48,21 +69,25 @@ export interface KnowledgeCreateParams {
   name?: string;
 }
 
-export interface KnowledgeListParams {
+export interface KnowledgeUpdateParams {
+  name: string;
+}
+
+export interface KnowledgeListParams extends CursorPageParams {
   direction?: 'asc' | 'desc';
-
-  limit?: number;
-
-  next?: string;
 
   sort?: 'created_at';
 }
 
+KnowledgeResource.KnowledgesCursorPage = KnowledgesCursorPage;
+
 export declare namespace KnowledgeResource {
   export {
     type Knowledge as Knowledge,
-    type KnowledgeListResponse as KnowledgeListResponse,
+    type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
+    KnowledgesCursorPage as KnowledgesCursorPage,
     type KnowledgeCreateParams as KnowledgeCreateParams,
+    type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
   };
 }

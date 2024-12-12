@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { DatagridSandbox } from './index';
+import type { Datagrid } from './index';
 
 export class APIResource {
-  protected _client: DatagridSandbox;
+  protected _client: Datagrid;
 
-  constructor(client: DatagridSandbox) {
+  constructor(client: Datagrid) {
     this._client = client;
   }
 }

@@ -2,13 +2,13 @@
 
 import { castToError, Headers } from './core';
 
-export class DatagridSandboxError extends Error {}
+export class DatagridError extends Error {}
 
 export class APIError<
   TStatus extends number | undefined = number | undefined,
   THeaders extends Headers | undefined = Headers | undefined,
   TError extends Object | undefined = Object | undefined,
-> extends DatagridSandboxError {
+> extends DatagridError {
   /** HTTP status for the response that caused the error */
   readonly status: TStatus;
   /** HTTP headers for the response that caused the error */

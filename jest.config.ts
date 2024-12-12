@@ -7,9 +7,9 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^datagrid-sandbox$': '<rootDir>/src/index.ts',
-    '^datagrid-sandbox/_shims/auto/(.*)$': '<rootDir>/src/_shims/auto/$1-node',
-    '^datagrid-sandbox/(.*)$': '<rootDir>/src/$1',
+    '^datagrid-ai$': '<rootDir>/src/index.ts',
+    '^datagrid-ai/_shims/auto/(.*)$': '<rootDir>/src/_shims/auto/$1-node',
+    '^datagrid-ai/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

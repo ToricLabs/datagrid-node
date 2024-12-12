@@ -9,9 +9,9 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "datagrid-sandbox/_shims/auto/*": ["src/_shims/auto/*-node"],
-      "datagrid-sandbox/*": ["src/*"],
-      "datagrid-sandbox": ["src/index.ts"]
+      "datagrid-ai/_shims/auto/*": ["src/_shims/auto/*-node"],
+      "datagrid-ai/*": ["src/*"],
+      "datagrid-ai": ["src/index.ts"]
     },
     "noEmit": true,
 

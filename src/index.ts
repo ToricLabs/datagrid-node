@@ -94,7 +94,7 @@ export class Datagrid extends Core.APIClient {
    * API Client for interfacing with the Datagrid API.
    *
    * @param {string | undefined} [opts.bearerToken=process.env['BEARER_TOKEN'] ?? undefined]
-   * @param {string | undefined} [opts.apiKey=process.env['API_KEY'] ?? undefined]
+   * @param {string | undefined} [opts.apiKey=process.env['DATAGRID_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['DATAGRID_BASE_URL'] ?? https://api.datagrid.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
@@ -106,7 +106,7 @@ export class Datagrid extends Core.APIClient {
   constructor({
     baseURL = Core.readEnv('DATAGRID_BASE_URL'),
     bearerToken = Core.readEnv('BEARER_TOKEN'),
-    apiKey = Core.readEnv('API_KEY'),
+    apiKey = Core.readEnv('DATAGRID_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (bearerToken === undefined) {
@@ -116,7 +116,7 @@ export class Datagrid extends Core.APIClient {
     }
     if (apiKey === undefined) {
       throw new Errors.DatagridError(
-        "The API_KEY environment variable is missing or empty; either provide it, or instantiate the Datagrid client with an apiKey option, like new Datagrid({ apiKey: 'My API Key' }).",
+        "The DATAGRID_API_KEY environment variable is missing or empty; either provide it, or instantiate the Datagrid client with an apiKey option, like new Datagrid({ apiKey: 'My API Key' }).",
       );
     }
 

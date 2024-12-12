@@ -6,10 +6,6 @@ import * as Core from '../core';
 import { CursorPage, type CursorPageParams } from '../pagination';
 
 export class KnowledgeResource extends APIResource {
-  create(body: KnowledgeCreateParams, options?: Core.RequestOptions): Core.APIPromise<Knowledge> {
-    return this._client.post('/v1/knowledge', Core.multipartFormRequestOptions({ body, ...options }));
-  }
-
   retrieve(knowledgeId: string, options?: Core.RequestOptions): Core.APIPromise<Knowledge> {
     return this._client.get(`/v1/knowledge/${knowledgeId}`, options);
   }
@@ -43,6 +39,10 @@ export class KnowledgeResource extends APIResource {
       headers: { Accept: '*/*', ...options?.headers },
     });
   }
+
+  create2(body: KnowledgeCreate2Params, options?: Core.RequestOptions): Core.APIPromise<Knowledge> {
+    return this._client.post('/v1/knowledge', Core.multipartFormRequestOptions({ body, ...options }));
+  }
 }
 
 export class KnowledgesCursorPage extends CursorPage<Knowledge> {}
@@ -63,12 +63,6 @@ export interface KnowledgeUpdateResponse {
   name?: string;
 }
 
-export interface KnowledgeCreateParams {
-  files: Array<Core.Uploadable>;
-
-  name?: string;
-}
-
 export interface KnowledgeUpdateParams {
   name: string;
 }
@@ -79,6 +73,12 @@ export interface KnowledgeListParams extends CursorPageParams {
   sort?: 'created_at';
 }
 
+export interface KnowledgeCreate2Params {
+  files: Array<Core.Uploadable>;
+
+  name?: string;
+}
+
 KnowledgeResource.KnowledgesCursorPage = KnowledgesCursorPage;
 
 export declare namespace KnowledgeResource {
@@ -86,8 +86,8 @@ export declare namespace KnowledgeResource {
     type Knowledge as Knowledge,
     type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
     KnowledgesCursorPage as KnowledgesCursorPage,
-    type KnowledgeCreateParams as KnowledgeCreateParams,
     type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
+    type KnowledgeCreate2Params as KnowledgeCreate2Params,
   };
 }

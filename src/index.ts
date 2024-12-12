@@ -9,7 +9,7 @@ import * as Uploads from './uploads';
 import * as API from './resources/index';
 import {
   Knowledge,
-  KnowledgeCreateParams,
+  KnowledgeCreate2Params,
   KnowledgeListParams,
   KnowledgeResource,
   KnowledgeUpdateParams,
@@ -206,9 +206,9 @@ export declare namespace Datagrid {
     type Knowledge as Knowledge,
     type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
     KnowledgesCursorPage as KnowledgesCursorPage,
-    type KnowledgeCreateParams as KnowledgeCreateParams,
     type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
+    type KnowledgeCreate2Params as KnowledgeCreate2Params,
   };
 }
 

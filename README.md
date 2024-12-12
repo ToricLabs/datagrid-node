@@ -28,7 +28,7 @@ import Datagrid from 'datagrid-ai';
 const client = new Datagrid();
 
 async function main() {
-  const knowledge = await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] });
+  const knowledge = await client.knowledge.create2({ files: [fs.createReadStream('path/to/file')] });
 
   console.log(knowledge.id);
 }
@@ -47,8 +47,8 @@ import Datagrid from 'datagrid-ai';
 const client = new Datagrid();
 
 async function main() {
-  const params: Datagrid.KnowledgeCreateParams = { files: [fs.createReadStream('path/to/file')] };
-  const knowledge: Datagrid.Knowledge = await client.knowledge.create(params);
+  const params: Datagrid.KnowledgeCreate2Params = { files: [fs.createReadStream('path/to/file')] };
+  const knowledge: Datagrid.Knowledge = await client.knowledge.create2(params);
 }
 
 main();
@@ -66,7 +66,7 @@ a subclass of `APIError` will be thrown:
 ```ts
 async function main() {
   const knowledge = await client.knowledge
-    .create({ files: [fs.createReadStream('path/to/file')] })
+    .create2({ files: [fs.createReadStream('path/to/file')] })
     .catch(async (err) => {
       if (err instanceof Datagrid.APIError) {
         console.log(err.status); // 400
@@ -110,7 +110,7 @@ const client = new Datagrid({
 });
 
 // Or, configure per-request:
-await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }, {
+await client.knowledge.create2({ files: [fs.createReadStream('path/to/file')] }, {
   maxRetries: 5,
 });
 ```
@@ -127,7 +127,7 @@ const client = new Datagrid({
 });
 
 // Override per-request:
-await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }, {
+await client.knowledge.create2({ files: [fs.createReadStream('path/to/file')] }, {
   timeout: 5 * 1000,
 });
 ```
@@ -179,12 +179,14 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Datagrid();
 
-const response = await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }).asResponse();
+const response = await client.knowledge
+  .create2({ files: [fs.createReadStream('path/to/file')] })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: knowledge, response: raw } = await client.knowledge
-  .create({ files: [fs.createReadStream('path/to/file')] })
+  .create2({ files: [fs.createReadStream('path/to/file')] })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(knowledge.id);
@@ -291,7 +293,7 @@ const client = new Datagrid({
 });
 
 // Override per-request:
-await client.knowledge.create(
+await client.knowledge.create2(
   { files: [fs.createReadStream('path/to/file')] },
   {
     httpAgent: new http.Agent({ keepAlive: false }),

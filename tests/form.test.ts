@@ -1,6 +1,6 @@
-import { multipartFormRequestOptions, createForm } from 'datagrid-sandbox/core';
-import { Blob } from 'datagrid-sandbox/_shims/index';
-import { toFile } from 'datagrid-sandbox';
+import { multipartFormRequestOptions, createForm } from 'datagrid-ai/core';
+import { Blob } from 'datagrid-ai/_shims/index';
+import { toFile } from 'datagrid-ai';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

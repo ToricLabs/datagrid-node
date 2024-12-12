@@ -42,12 +42,12 @@ export let isFsReadStream: Shims['isFsReadStream'] | undefined = undefined;
 export function setShims(shims: Shims, options: { auto: boolean } = { auto: false }) {
   if (auto) {
     throw new Error(
-      `you must \`import 'datagrid-sandbox/shims/${shims.kind}'\` before importing anything else from datagrid-sandbox`,
+      `you must \`import 'datagrid-ai/shims/${shims.kind}'\` before importing anything else from datagrid-ai`,
     );
   }
   if (kind) {
     throw new Error(
-      `can't \`import 'datagrid-sandbox/shims/${shims.kind}'\` after \`import 'datagrid-sandbox/shims/${kind}'\``,
+      `can't \`import 'datagrid-ai/shims/${shims.kind}'\` after \`import 'datagrid-ai/shims/${kind}'\``,
     );
   }
   auto = options.auto;

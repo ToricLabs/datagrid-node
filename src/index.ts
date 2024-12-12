@@ -3,31 +3,35 @@
 import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
+import * as Pagination from './pagination';
+import { type CursorPageParams, CursorPageResponse } from './pagination';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import {
   Knowledge,
   KnowledgeCreateParams,
   KnowledgeListParams,
-  KnowledgeListResponse,
   KnowledgeResource,
+  KnowledgeUpdateParams,
+  KnowledgeUpdateResponse,
+  KnowledgesCursorPage,
 } from './resources/knowledge';
 
 export interface ClientOptions {
   /**
-   * The token used for HTTP Bearer authentication.
+   * Bearer token for accessing the Datagrid API
    */
   bearerToken?: string | undefined;
 
   /**
-   * The API key used for header authentication.
+   * API key required in the X-API-Key header for accessing the Datagrid API
    */
   apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['DATAGRID_SANDBOX_BASE_URL'].
+   * Defaults to process.env['DATAGRID_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -82,20 +86,20 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Datagrid Sandbox API.
+ * API Client for interfacing with the Datagrid API.
  */
-export class DatagridSandbox extends Core.APIClient {
+export class Datagrid extends Core.APIClient {
   bearerToken: string;
   apiKey: string;
 
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Datagrid Sandbox API.
+   * API Client for interfacing with the Datagrid API.
    *
    * @param {string | undefined} [opts.bearerToken=process.env['BEARER_TOKEN'] ?? undefined]
-   * @param {string | undefined} [opts.apiKey=process.env['API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['DATAGRID_SANDBOX_BASE_URL'] ?? https://api.datagrid.com] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['DATAGRID_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['DATAGRID_BASE_URL'] ?? https://api.datagrid.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {number} [opts.httpAgent] - An HTTP agent used to manage HTTP(s) connections.
    * @param {Core.Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -104,19 +108,19 @@ export class DatagridSandbox extends Core.APIClient {
    * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = Core.readEnv('DATAGRID_SANDBOX_BASE_URL'),
+    baseURL = Core.readEnv('DATAGRID_BASE_URL'),
     bearerToken = Core.readEnv('BEARER_TOKEN'),
-    apiKey = Core.readEnv('API_KEY'),
+    apiKey = Core.readEnv('DATAGRID_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (bearerToken === undefined) {
-      throw new Errors.DatagridSandboxError(
-        "The BEARER_TOKEN environment variable is missing or empty; either provide it, or instantiate the DatagridSandbox client with an bearerToken option, like new DatagridSandbox({ bearerToken: 'My Bearer Token' }).",
+      throw new Errors.DatagridError(
+        "The BEARER_TOKEN environment variable is missing or empty; either provide it, or instantiate the Datagrid client with an bearerToken option, like new Datagrid({ bearerToken: 'My Bearer Token' }).",
       );
     }
     if (apiKey === undefined) {
-      throw new Errors.DatagridSandboxError(
-        "The API_KEY environment variable is missing or empty; either provide it, or instantiate the DatagridSandbox client with an apiKey option, like new DatagridSandbox({ apiKey: 'My API Key' }).",
+      throw new Errors.DatagridError(
+        "The DATAGRID_API_KEY environment variable is missing or empty; either provide it, or instantiate the Datagrid client with an apiKey option, like new Datagrid({ apiKey: 'My API Key' }).",
       );
     }
 
@@ -168,10 +172,10 @@ export class DatagridSandbox extends Core.APIClient {
     return { 'X-API-Key': this.apiKey };
   }
 
-  static DatagridSandbox = this;
+  static Datagrid = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static DatagridSandboxError = Errors.DatagridSandboxError;
+  static DatagridError = Errors.DatagridError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -189,22 +193,28 @@ export class DatagridSandbox extends Core.APIClient {
   static fileFromPath = Uploads.fileFromPath;
 }
 
-DatagridSandbox.KnowledgeResource = KnowledgeResource;
-export declare namespace DatagridSandbox {
+Datagrid.KnowledgeResource = KnowledgeResource;
+Datagrid.KnowledgesCursorPage = KnowledgesCursorPage;
+export declare namespace Datagrid {
   export type RequestOptions = Core.RequestOptions;
+
+  export import CursorPage = Pagination.CursorPage;
+  export { type CursorPageParams as CursorPageParams, type CursorPageResponse as CursorPageResponse };
 
   export {
     KnowledgeResource as KnowledgeResource,
     type Knowledge as Knowledge,
-    type KnowledgeListResponse as KnowledgeListResponse,
+    type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
+    KnowledgesCursorPage as KnowledgesCursorPage,
     type KnowledgeCreateParams as KnowledgeCreateParams,
+    type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
   };
 }
 
 export { toFile, fileFromPath } from './uploads';
 export {
-  DatagridSandboxError,
+  DatagridError,
   APIError,
   APIConnectionError,
   APIConnectionTimeoutError,
@@ -219,4 +229,4 @@ export {
   UnprocessableEntityError,
 } from './error';
 
-export default DatagridSandbox;
+export default Datagrid;

@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import DatagridSandbox from 'datagrid-sandbox';
-import { APIUserAbortError } from 'datagrid-sandbox';
-import { Headers } from 'datagrid-sandbox/core';
+import Datagrid from 'datagrid-ai';
+import { APIUserAbortError } from 'datagrid-ai';
+import { Headers } from 'datagrid-ai/core';
 import defaultFetch, { Response, type RequestInit, type RequestInfo } from 'node-fetch';
 
 describe('instantiate client', () => {
@@ -20,7 +20,7 @@ describe('instantiate client', () => {
   });
 
   describe('defaultHeaders', () => {
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
       bearerToken: 'My Bearer Token',
@@ -53,7 +53,7 @@ describe('instantiate client', () => {
 
   describe('defaultQuery', () => {
     test('with null query params given', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         bearerToken: 'My Bearer Token',
@@ -63,7 +63,7 @@ describe('instantiate client', () => {
     });
 
     test('multiple default query params', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         bearerToken: 'My Bearer Token',
@@ -73,7 +73,7 @@ describe('instantiate client', () => {
     });
 
     test('overriding with `undefined`', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         bearerToken: 'My Bearer Token',
@@ -84,7 +84,7 @@ describe('instantiate client', () => {
   });
 
   test('custom fetch', async () => {
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       baseURL: 'http://localhost:5000/',
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
@@ -102,7 +102,7 @@ describe('instantiate client', () => {
   });
 
   test('custom signal', async () => {
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
@@ -130,7 +130,7 @@ describe('instantiate client', () => {
 
   describe('baseUrl', () => {
     test('trailing slash', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'http://localhost:5000/custom/path/',
         bearerToken: 'My Bearer Token',
         apiKey: 'My API Key',
@@ -139,7 +139,7 @@ describe('instantiate client', () => {
     });
 
     test('no trailing slash', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'http://localhost:5000/custom/path',
         bearerToken: 'My Bearer Token',
         apiKey: 'My API Key',
@@ -148,11 +148,11 @@ describe('instantiate client', () => {
     });
 
     afterEach(() => {
-      process.env['DATAGRID_SANDBOX_BASE_URL'] = undefined;
+      process.env['DATAGRID_BASE_URL'] = undefined;
     });
 
     test('explicit option', () => {
-      const client = new DatagridSandbox({
+      const client = new Datagrid({
         baseURL: 'https://example.com',
         bearerToken: 'My Bearer Token',
         apiKey: 'My API Key',
@@ -161,42 +161,38 @@ describe('instantiate client', () => {
     });
 
     test('env variable', () => {
-      process.env['DATAGRID_SANDBOX_BASE_URL'] = 'https://example.com/from_env';
-      const client = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+      process.env['DATAGRID_BASE_URL'] = 'https://example.com/from_env';
+      const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
-      process.env['DATAGRID_SANDBOX_BASE_URL'] = ''; // empty
-      const client = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+      process.env['DATAGRID_BASE_URL'] = ''; // empty
+      const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://api.datagrid.com');
     });
 
     test('blank env variable', () => {
-      process.env['DATAGRID_SANDBOX_BASE_URL'] = '  '; // blank
-      const client = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+      process.env['DATAGRID_BASE_URL'] = '  '; // blank
+      const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://api.datagrid.com');
     });
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new DatagridSandbox({
-      maxRetries: 4,
-      bearerToken: 'My Bearer Token',
-      apiKey: 'My API Key',
-    });
+    const client = new Datagrid({ maxRetries: 4, bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+    const client2 = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
     expect(client2.maxRetries).toEqual(2);
   });
 
   test('with environment variable arguments', () => {
     // set options via env var
     process.env['BEARER_TOKEN'] = 'My Bearer Token';
-    process.env['API_KEY'] = 'My API Key';
-    const client = new DatagridSandbox();
+    process.env['DATAGRID_API_KEY'] = 'My API Key';
+    const client = new Datagrid();
     expect(client.bearerToken).toBe('My Bearer Token');
     expect(client.apiKey).toBe('My API Key');
   });
@@ -204,15 +200,15 @@ describe('instantiate client', () => {
   test('with overriden environment variable arguments', () => {
     // set options via env var
     process.env['BEARER_TOKEN'] = 'another My Bearer Token';
-    process.env['API_KEY'] = 'another My API Key';
-    const client = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+    process.env['DATAGRID_API_KEY'] = 'another My API Key';
+    const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
     expect(client.bearerToken).toBe('My Bearer Token');
     expect(client.apiKey).toBe('My API Key');
   });
 });
 
 describe('request building', () => {
-  const client = new DatagridSandbox({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
+  const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
 
   describe('Content-Length', () => {
     test('handles multi-byte characters', () => {
@@ -254,7 +250,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
       timeout: 10,
@@ -289,7 +285,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
       fetch: testFetch,
@@ -318,7 +314,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
       fetch: testFetch,
@@ -352,7 +348,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
       fetch: testFetch,
@@ -386,7 +382,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new DatagridSandbox({
+    const client = new Datagrid({
       bearerToken: 'My Bearer Token',
       apiKey: 'My API Key',
       fetch: testFetch,
@@ -418,11 +414,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DatagridSandbox({
-      bearerToken: 'My Bearer Token',
-      apiKey: 'My API Key',
-      fetch: testFetch,
-    });
+    const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -449,11 +441,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new DatagridSandbox({
-      bearerToken: 'My Bearer Token',
-      apiKey: 'My API Key',
-      fetch: testFetch,
-    });
+    const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);

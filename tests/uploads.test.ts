@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { toFile, type ResponseLike } from 'datagrid-sandbox/uploads';
-import { File } from 'datagrid-sandbox/_shims/index';
+import { toFile, type ResponseLike } from 'datagrid-ai/uploads';
+import { File } from 'datagrid-ai/_shims/index';
 
 class MyClass {
   name: string = 'foo';

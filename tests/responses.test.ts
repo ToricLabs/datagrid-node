@@ -1,5 +1,5 @@
-import { createResponseHeaders } from 'datagrid-sandbox/core';
-import { Headers } from 'datagrid-sandbox/_shims/index';
+import { createResponseHeaders } from 'datagrid-ai/core';
+import { Headers } from 'datagrid-ai/_shims/index';
 
 describe('response parsing', () => {
   // TODO: test unicode characters

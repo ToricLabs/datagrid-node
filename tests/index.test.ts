@@ -191,7 +191,7 @@ describe('instantiate client', () => {
   test('with environment variable arguments', () => {
     // set options via env var
     process.env['BEARER_TOKEN'] = 'My Bearer Token';
-    process.env['API_KEY'] = 'My API Key';
+    process.env['DATAGRID_API_KEY'] = 'My API Key';
     const client = new Datagrid();
     expect(client.bearerToken).toBe('My Bearer Token');
     expect(client.apiKey).toBe('My API Key');
@@ -200,7 +200,7 @@ describe('instantiate client', () => {
   test('with overriden environment variable arguments', () => {
     // set options via env var
     process.env['BEARER_TOKEN'] = 'another My Bearer Token';
-    process.env['API_KEY'] = 'another My API Key';
+    process.env['DATAGRID_API_KEY'] = 'another My API Key';
     const client = new Datagrid({ bearerToken: 'My Bearer Token', apiKey: 'My API Key' });
     expect(client.bearerToken).toBe('My Bearer Token');
     expect(client.apiKey).toBe('My API Key');

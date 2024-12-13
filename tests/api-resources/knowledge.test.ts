@@ -10,26 +10,6 @@ const client = new Datagrid({
 });
 
 describe('resource knowledge', () => {
-  test('create: only required params', async () => {
-    const responsePromise = client.knowledge.create({
-      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('create: required and optional params', async () => {
-    const response = await client.knowledge.create({
-      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
-      name: 'name',
-    });
-  });
-
   test('retrieve', async () => {
     const responsePromise = client.knowledge.retrieve('knowledge_id');
     const rawResponse = await responsePromise.asResponse();
@@ -48,8 +28,8 @@ describe('resource knowledge', () => {
     ).rejects.toThrow(Datagrid.NotFoundError);
   });
 
-  test('update: only required params', async () => {
-    const responsePromise = client.knowledge.update('knowledge_id', { name: 'name' });
+  test('update', async () => {
+    const responsePromise = client.knowledge.update('knowledge_id', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,10 +37,6 @@ describe('resource knowledge', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('update: required and optional params', async () => {
-    const response = await client.knowledge.update('knowledge_id', { name: 'name' });
   });
 
   test('list', async () => {
@@ -85,7 +61,7 @@ describe('resource knowledge', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.knowledge.list(
-        { direction: 'asc', limit: 0, next: 'next', sort: 'created_at' },
+        { direction: 'asc', limit: 0, next: 'next', sort: 'created_at', teamspace_id: 'teamspace_id' },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Datagrid.NotFoundError);
@@ -107,5 +83,26 @@ describe('resource knowledge', () => {
     await expect(
       client.knowledge.delete('knowledge_id', { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Datagrid.NotFoundError);
+  });
+
+  test('create2: only required params', async () => {
+    const responsePromise = client.knowledge.create2({
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('create2: required and optional params', async () => {
+    const response = await client.knowledge.create2({
+      files: [await toFile(Buffer.from('# my file contents'), 'README.md')],
+      name: 'name',
+      teamspace_id: 'teamspace_id',
+    });
   });
 });

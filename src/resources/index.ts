@@ -5,7 +5,7 @@ export {
   KnowledgeResource,
   type Knowledge,
   type KnowledgeUpdateResponse,
-  type KnowledgeCreateParams,
   type KnowledgeUpdateParams,
   type KnowledgeListParams,
+  type KnowledgeCreate2Params,
 } from './knowledge';

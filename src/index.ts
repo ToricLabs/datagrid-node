@@ -9,7 +9,7 @@ import * as Uploads from './uploads';
 import * as API from './resources/index';
 import {
   Knowledge,
-  KnowledgeCreateParams,
+  KnowledgeCreate2Params,
   KnowledgeListParams,
   KnowledgeResource,
   KnowledgeUpdateParams,
@@ -158,20 +158,6 @@ export class Datagrid extends Core.APIClient {
     };
   }
 
-  protected override authHeaders(opts: Core.FinalRequestOptions): Core.Headers {
-    const bearerAuth = this.bearerAuth(opts);
-    const apiKeyAuth = this.apiKeyAuth(opts);
-    return {};
-  }
-
-  protected bearerAuth(opts: Core.FinalRequestOptions): Core.Headers {
-    return { Authorization: `Bearer ${this.bearerToken}` };
-  }
-
-  protected apiKeyAuth(opts: Core.FinalRequestOptions): Core.Headers {
-    return { 'X-API-Key': this.apiKey };
-  }
-
   static Datagrid = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
@@ -206,9 +192,9 @@ export declare namespace Datagrid {
     type Knowledge as Knowledge,
     type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
     KnowledgesCursorPage as KnowledgesCursorPage,
-    type KnowledgeCreateParams as KnowledgeCreateParams,
     type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
+    type KnowledgeCreate2Params as KnowledgeCreate2Params,
   };
 }
 

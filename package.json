@@ -1,5 +1,5 @@
 {
-  "name": "datagrid",
+  "name": "datagrid-ai",
   "version": "0.0.1-alpha.0",
   "description": "The official TypeScript library for the Datagrid API",
   "author": "Datagrid <dev-feedback@datagrid.com>",
@@ -59,8 +59,8 @@
     "./shims/web.mjs"
   ],
   "imports": {
-    "datagrid": ".",
-    "datagrid/*": "./src/*"
+    "datagrid-ai": ".",
+    "datagrid-ai/*": "./src/*"
   },
   "exports": {
     "./_shims/auto/*": {

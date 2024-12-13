@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Datagrid from 'datagrid';
-import { APIUserAbortError } from 'datagrid';
-import { Headers } from 'datagrid/core';
+import Datagrid from 'datagrid-ai';
+import { APIUserAbortError } from 'datagrid-ai';
+import { Headers } from 'datagrid-ai/core';
 import defaultFetch, { Response, type RequestInit, type RequestInfo } from 'node-fetch';
 
 describe('instantiate client', () => {

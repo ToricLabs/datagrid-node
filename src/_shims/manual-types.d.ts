@@ -4,8 +4,8 @@
 /**
  * Types will get added to this namespace when you import one of the following:
  *
- *   import 'datagrid/shims/node'
- *   import 'datagrid/shims/web'
+ *   import 'datagrid-ai/shims/node'
+ *   import 'datagrid-ai/shims/web'
  *
  * Importing more than one will cause type and runtime errors.
  */

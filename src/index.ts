@@ -3,14 +3,18 @@
 import { type Agent } from './_shims/index';
 import * as Core from './core';
 import * as Errors from './error';
+import * as Pagination from './pagination';
+import { type CursorPageParams, CursorPageResponse } from './pagination';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import {
   Knowledge,
   KnowledgeCreateParams,
   KnowledgeListParams,
-  KnowledgeListResponse,
   KnowledgeResource,
+  KnowledgeUpdateParams,
+  KnowledgeUpdateResponse,
+  KnowledgesCursorPage,
 } from './resources/knowledge';
 
 export interface ClientOptions {
@@ -190,14 +194,20 @@ export class Datagrid extends Core.APIClient {
 }
 
 Datagrid.KnowledgeResource = KnowledgeResource;
+Datagrid.KnowledgesCursorPage = KnowledgesCursorPage;
 export declare namespace Datagrid {
   export type RequestOptions = Core.RequestOptions;
+
+  export import CursorPage = Pagination.CursorPage;
+  export { type CursorPageParams as CursorPageParams, type CursorPageResponse as CursorPageResponse };
 
   export {
     KnowledgeResource as KnowledgeResource,
     type Knowledge as Knowledge,
-    type KnowledgeListResponse as KnowledgeListResponse,
+    type KnowledgeUpdateResponse as KnowledgeUpdateResponse,
+    KnowledgesCursorPage as KnowledgesCursorPage,
     type KnowledgeCreateParams as KnowledgeCreateParams,
+    type KnowledgeUpdateParams as KnowledgeUpdateParams,
     type KnowledgeListParams as KnowledgeListParams,
   };
 }

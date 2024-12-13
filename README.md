@@ -1,6 +1,6 @@
 # Datagrid Node API Library
 
-[![NPM version](https://img.shields.io/npm/v/datagrid.svg)](https://npmjs.org/package/datagrid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/datagrid)
+[![NPM version](https://img.shields.io/npm/v/datagrid-ai.svg)](https://npmjs.org/package/datagrid-ai) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/datagrid-ai)
 
 This library provides convenient access to the Datagrid REST API from server-side TypeScript or JavaScript.
 
@@ -15,7 +15,7 @@ npm install git+ssh://git@github.com:stainless-sdks/datagrid-node.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install datagrid`
+> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install datagrid-ai`
 
 ## Usage
 
@@ -23,12 +23,12 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Datagrid from 'datagrid';
+import Datagrid from 'datagrid-ai';
 
 const client = new Datagrid();
 
 async function main() {
-  const knowledge = await client.knowledge.create({ files: null });
+  const knowledge = await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] });
 
   console.log(knowledge.id);
 }
@@ -42,12 +42,12 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Datagrid from 'datagrid';
+import Datagrid from 'datagrid-ai';
 
 const client = new Datagrid();
 
 async function main() {
-  const params: Datagrid.KnowledgeCreateParams = { files: null };
+  const params: Datagrid.KnowledgeCreateParams = { files: [fs.createReadStream('path/to/file')] };
   const knowledge: Datagrid.Knowledge = await client.knowledge.create(params);
 }
 
@@ -65,15 +65,17 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const knowledge = await client.knowledge.create({ files: null }).catch(async (err) => {
-    if (err instanceof Datagrid.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+  const knowledge = await client.knowledge
+    .create({ files: [fs.createReadStream('path/to/file')] })
+    .catch(async (err) => {
+      if (err instanceof Datagrid.APIError) {
+        console.log(err.status); // 400
+        console.log(err.name); // BadRequestError
+        console.log(err.headers); // {server: 'nginx', ...}
+      } else {
+        throw err;
+      }
+    });
 }
 
 main();
@@ -108,7 +110,7 @@ const client = new Datagrid({
 });
 
 // Or, configure per-request:
-await client.knowledge.create({ files: null }, {
+await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }, {
   maxRetries: 5,
 });
 ```
@@ -125,7 +127,7 @@ const client = new Datagrid({
 });
 
 // Override per-request:
-await client.knowledge.create({ files: null }, {
+await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }, {
   timeout: 5 * 1000,
 });
 ```
@@ -133,6 +135,37 @@ await client.knowledge.create({ files: null }, {
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Auto-pagination
+
+List methods in the Datagrid API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllKnowledges(params) {
+  const allKnowledges = [];
+  // Automatically fetches more pages as needed.
+  for await (const knowledge of client.knowledge.list()) {
+    allKnowledges.push(knowledge);
+  }
+  return allKnowledges;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.knowledge.list();
+for (const knowledge of page.data) {
+  console.log(knowledge);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
 
 ## Advanced Usage
 
@@ -146,11 +179,13 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Datagrid();
 
-const response = await client.knowledge.create({ files: null }).asResponse();
+const response = await client.knowledge.create({ files: [fs.createReadStream('path/to/file')] }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: knowledge, response: raw } = await client.knowledge.create({ files: null }).withResponse();
+const { data: knowledge, response: raw } = await client.knowledge
+  .create({ files: [fs.createReadStream('path/to/file')] })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(knowledge.id);
 ```
@@ -210,11 +245,11 @@ add the following import before your first import `from "Datagrid"`:
 ```ts
 // Tell TypeScript and the package to use the global web fetch instead of node-fetch.
 // Note, despite the name, this does not add any polyfills, but expects them to be provided if needed.
-import 'datagrid/shims/web';
-import Datagrid from 'datagrid';
+import 'datagrid-ai/shims/web';
+import Datagrid from 'datagrid-ai';
 ```
 
-To do the inverse, add `import "datagrid/shims/node"` (which does import polyfills).
+To do the inverse, add `import "datagrid-ai/shims/node"` (which does import polyfills).
 This can also be useful if you are getting the wrong TypeScript types for `Response` ([more details](https://github.com/stainless-sdks/datagrid-node/tree/main/src/_shims#readme)).
 
 ### Logging and middleware
@@ -224,7 +259,7 @@ which can be used to inspect or alter the `Request` or `Response` before/after e
 
 ```ts
 import { fetch } from 'undici'; // as one example
-import Datagrid from 'datagrid';
+import Datagrid from 'datagrid-ai';
 
 const client = new Datagrid({
   fetch: async (url: RequestInfo, init?: RequestInit): Promise<Response> => {
@@ -257,7 +292,7 @@ const client = new Datagrid({
 
 // Override per-request:
 await client.knowledge.create(
-  { files: null },
+  { files: [fs.createReadStream('path/to/file')] },
   {
     httpAgent: new http.Agent({ keepAlive: false }),
   },

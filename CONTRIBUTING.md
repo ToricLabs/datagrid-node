@@ -55,12 +55,12 @@ $ cd datagrid-node
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link datagrid
+$ yarn link datagrid-ai
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global datagrid
+$ pnpm link -—global datagrid-ai
 ```
 
 ## Running tests

@@ -2,6 +2,10 @@
   "include": ["src", "tests", "examples"],
   "exclude": ["src/_shims/**/*-deno.ts"],
   "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true,
+	  
     "target": "es2020",
     "lib": ["es2020"],
     "module": "commonjs",
@@ -13,7 +17,6 @@
       "datagrid-ai/*": ["src/*"],
       "datagrid-ai": ["src/index.ts"]
     },
-    "noEmit": true,
 
     "resolveJsonModule": true,
 
